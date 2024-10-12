@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import multisigfactory from "./factory.json";
-import Chat from './Chat';  // Real-time chat component
+import Chat from './pages/Chat';  // Real-time chat component
 import ChatHistory from './ChatHistory'; // Component for old chat history
 
 function JobMarketplace({ wallet }) {
