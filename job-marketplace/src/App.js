@@ -1,21 +1,39 @@
-// src/App.js
-
-import React, { useState } from 'react';
-import JobPostingForm from './components/JobPostingForm';
-import JobList from './components/JobList';
+import { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import JobPosting from './JobPosting';
+import JobMarketplace from './JobMarketplace';
 
 function App() {
-  const [jobs, setJobs] = useState([
-    { id: 1, description: 'Blockchain Developer', paymentTerms: 'Hourly', deadline: '2024-12-01' },
-    { id: 2, description: 'React Developer', paymentTerms: 'Fixed', deadline: '2024-11-15' },
-  ]);
+    const [wallet, setWallet] = useState(null);
 
-  return (
-    <div className="App">
-      <JobPostingForm />
-      <JobList jobs={jobs} />
-    </div>
-  );
+    async function connectWallet() {
+        if (window.ethereum) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            const signer = provider.getSigner();
+            setWallet(signer);
+        } else {
+            alert("Please install MetaMask to use this app!");
+        }
+    }
+
+    useEffect(() => {
+        connectWallet();
+    }, []);
+
+    return (
+        <div>
+            {wallet ? (
+                <>
+                    <p>Connected to {wallet.address}</p>
+                    <JobPosting wallet={wallet} />
+                    <JobMarketplace wallet={wallet} />
+                </>
+            ) : (
+                <button onClick={connectWallet}>Connect Wallet</button>
+            )}
+        </div>
+    );
 }
 
 export default App;
