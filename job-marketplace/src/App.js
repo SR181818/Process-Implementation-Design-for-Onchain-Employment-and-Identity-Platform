@@ -1,39 +1,25 @@
-import { useState, useEffect } from "react";
-import { ethers } from "ethers";
-import JobPosting from './JobPosting';
-import JobMarketplace from './JobMarketplace';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import JobListings from './pages/JobListings';
+import JobDetails from './pages/JobDetails';
+import Chat from './pages/Chat';
+import PreviousChats from './pages/PreviousChats';
+import Navbar from './Navbar';
 
 function App() {
-    const [wallet, setWallet] = useState(null);
-
-    async function connectWallet() {
-        if (window.ethereum) {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            await provider.send("eth_requestAccounts", []);
-            const signer = provider.getSigner();
-            setWallet(signer);
-        } else {
-            alert("Please install MetaMask to use this app!");
-        }
-    }
-
-    useEffect(() => {
-        connectWallet();
-    }, []);
-
-    return (
-        <div>
-            {wallet ? (
-                <>
-                    <p>Connected to {wallet.address}</p>
-                    <JobPosting wallet={wallet} />
-                    <JobMarketplace wallet={wallet} />
-                </>
-            ) : (
-                <button onClick={connectWallet}>Connect Wallet</button>
-            )}
-        </div>
-    );
+  return (
+    <Router>
+      <Navbar />
+      <div>
+        <Routes>
+          <Route path="/" element={<JobListings />} />
+          <Route path="/job/:jobId" element={<JobDetails />} />
+          <Route path="/chat/:jobId" element={<Chat />} />
+          <Route path="/previous-chats" element={<PreviousChats />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
