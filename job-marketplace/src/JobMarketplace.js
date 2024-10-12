@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import multisigfactory from "./factory.json";
+import Chat from './Chat';  // Real-time chat component
+import ChatHistory from './ChatHistory'; // Component for old chat history
 
 function JobMarketplace({ wallet }) {
     const [jobs, setJobs] = useState([]);
+    const [connectedContracts, setConnectedContracts] = useState([]);  // Track connected contracts
 
     useEffect(() => {
-        // Fetch jobs by querying the contract factory for instantiations
         async function fetchJobs() {
             const FACTORY_ABI = multisigfactory;
             const FACTORY_ADDRESS = "0xB3d9E2C3Ca370603398516608d9edFbbC0AC4a79";
@@ -16,9 +18,7 @@ function JobMarketplace({ wallet }) {
             const jobCount = await factoryContract.getInstantiationCount();
 
             let fetchedJobs = [];
-
-            // Loop through the instantiations from 0 to 1000 (or `jobCount`, whichever is smaller)
-            const limit = Math.min(jobCount, 1000);  // Limit the loop to 1000 or `jobCount`, whichever is smaller
+            const limit = Math.min(jobCount, 1000);
             for (let i = 0; i < limit; i++) {
                 try {
                     const jobAddress = await factoryContract.getInstantiation(i);
@@ -27,17 +27,17 @@ function JobMarketplace({ wallet }) {
                     console.error(`Failed to fetch instantiation at index ${i}:`, error);
                 }
             }
-
-            // Update state with the fetched jobs
             setJobs(fetchedJobs);
         }
 
         fetchJobs();
     }, [wallet]);
 
-    async function applyForJob(jobAddress) {
-        // Placeholder for applying logic
-        alert(`Applied for job at contract: ${jobAddress}`);
+    // Simulate job contract connection (replace with real connection logic)
+    async function connectToJob(jobAddress) {
+        // Here you should check the actual connection logic for employer and worker.
+        setConnectedContracts([...connectedContracts, jobAddress]);
+        alert(`Connected to job contract: ${jobAddress}`);
     }
 
     return (
@@ -47,10 +47,14 @@ function JobMarketplace({ wallet }) {
                 {jobs.map((job, index) => (
                     <li key={index}>
                         <p>Job Contract: {job.contract}</p>
-                        <button onClick={() => applyForJob(job.contract)}>Apply</button>
+                        <button onClick={() => connectToJob(job.contract)}>Connect</button>
+                        {/* Only show chat if connected */}
+                        {connectedContracts.includes(job.contract) && <Chat jobAddress={job.contract} />}
                     </li>
                 ))}
             </ul>
+            {/* Page to view chat history */}
+            <ChatHistory />
         </div>
     );
 }

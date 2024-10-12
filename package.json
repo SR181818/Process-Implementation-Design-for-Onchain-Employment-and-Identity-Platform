@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@pushprotocol/restapi": "^1.7.28",
     "@web3-react/core": "^8.2.0",
     "@web3-react/injected-connector": "^6.0.7",
     "hardhat": "^2.14.0",
