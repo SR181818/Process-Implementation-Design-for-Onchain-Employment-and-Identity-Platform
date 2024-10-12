@@ -23,14 +23,10 @@
 		"inputs": [
 			{
 				"name": "",
-				"type": "address"
-			},
-			{
-				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "instantiations",
+		"name": "allInstantiations",
 		"outputs": [
 			{
 				"name": "",
@@ -45,10 +41,38 @@
 		"constant": true,
 		"inputs": [
 			{
-				"name": "creator",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "getInstantiation",
+		"outputs": [
+			{
+				"name": "",
 				"type": "address"
 			}
 		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getAllInstantiations",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
 		"name": "getInstantiationCount",
 		"outputs": [
 			{

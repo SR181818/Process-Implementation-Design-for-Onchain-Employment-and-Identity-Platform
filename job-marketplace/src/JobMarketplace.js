@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { create } from "ipfs-http-client";
 import multisigfactory from "./factory.json";
-
-const ipfs = create("https://ipfs.infura.io:5001/api/v0");
 
 function JobMarketplace({ wallet }) {
     const [jobs, setJobs] = useState([]);
@@ -12,11 +9,11 @@ function JobMarketplace({ wallet }) {
         // Fetch jobs by querying the contract factory for instantiations
         async function fetchJobs() {
             const FACTORY_ABI = multisigfactory;
-            const FACTORY_ADDRESS = "0xb079272C54a743624ECCf48d6D4761099104d075";
+            const FACTORY_ADDRESS = "0xB3d9E2C3Ca370603398516608d9edFbbC0AC4a79";
             const factoryContract = new ethers.Contract(FACTORY_ADDRESS, FACTORY_ABI, wallet);
 
             // Fetch total instantiations count
-            const jobCount = await factoryContract.getInstantiationCount(wallet.getAddress());
+            const jobCount = await factoryContract.getInstantiationCount();
 
             let fetchedJobs = [];
 
@@ -24,7 +21,7 @@ function JobMarketplace({ wallet }) {
             const limit = Math.min(jobCount, 1000);  // Limit the loop to 1000 or `jobCount`, whichever is smaller
             for (let i = 0; i < limit; i++) {
                 try {
-                    const jobAddress = await factoryContract.instantiations(wallet.getAddress(), i);
+                    const jobAddress = await factoryContract.getInstantiation(i);
                     fetchedJobs.push({ contract: jobAddress });
                 } catch (error) {
                     console.error(`Failed to fetch instantiation at index ${i}:`, error);
@@ -39,11 +36,8 @@ function JobMarketplace({ wallet }) {
     }, [wallet]);
 
     async function applyForJob(jobAddress) {
-        // Placeholder for applying logic, uploading CV/portfolio to IPFS
-        const applicationData = { portfolio: "Your portfolio URL or content" };
-        const ipfsResult = await ipfs.add(JSON.stringify(applicationData));
-
-        alert(`Applied! CV stored at: ${ipfsResult.path}`);
+        // Placeholder for applying logic
+        alert(`Applied for job at contract: ${jobAddress}`);
     }
 
     return (

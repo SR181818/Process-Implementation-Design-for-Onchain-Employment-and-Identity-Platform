@@ -43,15 +43,29 @@
 		"constant": true,
 		"inputs": [
 			{
-				"name": "creator",
-				"type": "address"
+				"name": "",
+				"type": "uint256"
 			}
 		],
-		"name": "getInstantiationCount",
+		"name": "allInstantiations",
 		"outputs": [
 			{
 				"name": "",
-				"type": "uint256"
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getAllInstantiations",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address[]"
 			}
 		],
 		"payable": false,
@@ -62,19 +76,29 @@
 		"constant": true,
 		"inputs": [
 			{
-				"name": "",
-				"type": "address"
-			},
-			{
-				"name": "",
+				"name": "index",
 				"type": "uint256"
 			}
 		],
-		"name": "instantiations",
+		"name": "getInstantiation",
 		"outputs": [
 			{
 				"name": "",
 				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getInstantiationCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
