@@ -11,20 +11,42 @@ contract Factory {
      *  Storage
      */
     mapping(address => bool) public isInstantiation;
-    mapping(address => address[]) public instantiations;
+    address[] public allInstantiations; // Store all contract instantiations
 
     /*
      * Public functions
      */
-    /// @dev Returns number of instantiations by creator.
-    /// @param creator Contract creator.
-    /// @return Returns number of instantiations by creator.
-    function getInstantiationCount(address creator)
+
+    /// @dev Returns number of all instantiations.
+    /// @return Returns the number of total instantiations.
+    function getInstantiationCount()
         public
-        constant
+        view
         returns (uint)
     {
-        return instantiations[creator].length;
+        return allInstantiations.length;
+    }
+
+    /// @dev Returns the address of an instantiation at a specific index.
+    /// @param index The index of the instantiation to return.
+    /// @return Returns the address of the instantiation.
+    function getInstantiation(uint index)
+        public
+        view
+        returns (address)
+    {
+        require(index < allInstantiations.length, "Index out of bounds");
+        return allInstantiations[index];
+    }
+
+    /// @dev Returns all instantiations created so far.
+    /// @return An array of addresses of all contract instantiations.
+    function getAllInstantiations()
+        public
+        view
+        returns (address[])
+    {
+        return allInstantiations;
     }
 
     /*
@@ -36,7 +58,7 @@ contract Factory {
         internal
     {
         isInstantiation[instantiation] = true;
-        instantiations[msg.sender].push(instantiation);
+        allInstantiations.push(instantiation);
         ContractInstantiation(msg.sender, instantiation);
     }
 }

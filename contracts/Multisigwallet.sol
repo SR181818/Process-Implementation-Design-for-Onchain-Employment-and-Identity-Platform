@@ -1,7 +1,8 @@
 pragma solidity ^0.4.15;
 
 
-
+/// @title Multisignature wallet - Allows multiple parties to agree on transactions before execution.
+/// @author Stefan George - <stefan.george@consensys.net>
 contract MultiSigWallet {
 
     /*
@@ -346,6 +347,12 @@ struct Payment {
     require(address(this).balance >= paymentAmount, "Insufficient funds in escrow");
     job.worker.transfer(paymentAmount);
 }
+
+
+    function applyToJob(uint _jobId, string memory _applicationCID) public {
+        // Link worker's application to the job
+    }
+
 
 
     function createJob(address _worker, uint256 _totalEscrowAmount, uint256[] _milestoneAmounts, uint256 _startTime, uint256 _endTime) 
