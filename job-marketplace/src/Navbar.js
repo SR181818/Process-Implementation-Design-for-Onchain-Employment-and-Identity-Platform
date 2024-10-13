@@ -50,9 +50,9 @@ function Navbar() {
             </div>
             <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
                 <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
-                <li><Link to="/job/:jobId" onClick={toggleMenu}>Jobs</Link></li>
+                <li><Link to="/job-listings" onClick={toggleMenu}>Jobs</Link></li>
                 <li><Link to="/post-job" onClick={toggleMenu}>Post a Job</Link></li>
-                <li><Link to="/chat/:jobId" onClick={toggleMenu}>Chats</Link></li>
+                <li><Link to="/chat/1" onClick={toggleMenu}>Chats</Link></li>
                 <li><Link to="/previous-chats" onClick={toggleMenu}>Old Chats</Link></li>
             </ul>
             <div className="wallet">
