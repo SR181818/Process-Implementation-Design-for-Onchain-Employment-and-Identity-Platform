@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import Webcam from 'react-webcam';
-
+import { useNavigate } from 'react-router-dom';
 
 const FaceVerification = () => {
   const webcamRef = useRef(null);
@@ -9,6 +9,7 @@ const FaceVerification = () => {
   const [isVerified, setIsVerified] = useState(null);
   const [error, setError] = useState(null);
   const [referenceDescriptors, setReferenceDescriptors] = useState([]);
+  const navigate = useNavigate(); // Hook for navigation after successful login
 
   const MODEL_URL = '/models'; 
 
@@ -32,14 +33,13 @@ const FaceVerification = () => {
   useEffect(() => {
     const importAll = (r) => {
       let images = [];
-      r.keys().map((item, index) => { images.push(r(item)); });
+      r.keys().map((item) => images.push(r(item)));
       return images;
     };
 
-    const images = importAll(require.context('../immigration-app-backend/uploads', false, /\.(jpg|jpeg|png|gif)$/));
+    const images = importAll(require.context('../Job-marketplace-backend/uploads', false, /\.(jpg|jpeg|png|gif)$/));
     const loadReferenceImages = async () => {
       const descriptors = [];
-
       for (const img of images) {
         const image = new Image();
         image.src = img;
@@ -51,7 +51,6 @@ const FaceVerification = () => {
           }
         };
       }
-
       setReferenceDescriptors(descriptors);
     };
 
@@ -73,14 +72,16 @@ const FaceVerification = () => {
             faceapi.euclideanDistance(detection.descriptor, descriptor)
           );
           const minDistance = Math.min(...distances);
-
-          const threshold = 0.5;
+          const threshold = 0.5; // Set threshold for face similarity
           if (minDistance < threshold) {
             setIsVerified(true);
-            console.log('Captured image matches a reference image!');
+            console.log('Face verified successfully!');
+            setTimeout(() => {
+              navigate('/dashboard'); // Navigate to dashboard after successful verification
+            }, 1000);
           } else {
             setIsVerified(false);
-            console.log('Captured image does not match any reference image.');
+            console.log('Face verification failed.');
           }
         }
       };
@@ -91,14 +92,14 @@ const FaceVerification = () => {
 
   return (
     <div>
-      <h1>Face Verification</h1>
+      <h1>Login with Face Verification</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {isVerified === true ? (
-        <p style={{ color: 'green' }}>Captured image: Same face as uploaded!</p>
+        <p style={{ color: 'green' }}>Login successful! Redirecting...</p>
       ) : isVerified === false ? (
-        <p style={{ color: 'red' }}>Captured image: Not the same face as uploaded. Try again.</p>
+        <p style={{ color: 'red' }}>Face not recognized. Please try again.</p>
       ) : (
-        <p>Please capture your face.</p>
+        <p>Please capture your face for verification.</p>
       )}
 
       <Webcam
@@ -108,8 +109,7 @@ const FaceVerification = () => {
         width="640"
         height="480"
       />
-
-      <button onClick={captureAndVerify}>Verify Webcam Face</button>
+      <button onClick={captureAndVerify}>Login with Face</button>
     </div>
   );
 };
