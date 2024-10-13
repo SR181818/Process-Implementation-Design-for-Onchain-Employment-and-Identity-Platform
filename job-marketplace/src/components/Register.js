@@ -98,50 +98,37 @@ const Register = () => {
 
   return (
     <div className="container">
-      <h1>Register with Wallet & Face Recognition</h1>
+    <h2>Register (Sign-Up)</h2>
+    
+    <div className="wallet-connection">
+      <h3>Step 1: Connect Wallet</h3>
+      <button onClick={connectWallet}>
+        {walletAddress ? `Wallet Connected: ${walletAddress}` : "Connect Wallet"}
+      </button>
+    </div>
 
-      {walletAddress ? (
-        <p>Connected Wallet Address: {walletAddress}</p>
-      ) : (
-        <button onClick={connectWallet} className="wallet-btn">
-          Connect Wallet
-        </button>
-      )}
-
-      <div className="webcam-container">
-        {modelsLoaded ? (
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className="webcam"
-          />
-        ) : (
-          <p>Loading face recognition models...</p>
-        )}
-        <button onClick={captureImage} className="capture-btn" disabled={!modelsLoaded}>
-          Capture Face
-        </button>
-      </div>
+    <div className="face-recognition">
+      <h3>Step 2: Face Recognition</h3>
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        className="webcam"
+      />
+      <button onClick={captureImage}>Capture Face</button>
 
       {capturedImage && (
         <div className="captured-image">
-          <h3>Captured Image</h3>
-          <img src={capturedImage} alt="Captured" />
+          <img src={capturedImage} alt="Captured Face" />
         </div>
       )}
-
-      {loading && <p>Registering...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {isRegistered ? (
-        <p style={{ color: 'green' }}>Registration successful!</p>
-      ) : (
-        <button onClick={handleRegister} className="register-btn" disabled={loading || !capturedImage || !walletAddress}>
-          Register
-        </button>
-      )}
     </div>
-  );
+
+    <button className="register-btn" onClick={handleRegister}>
+      Complete Registration
+    </button>
+  </div>
+);
 };
 
 export default Register;
